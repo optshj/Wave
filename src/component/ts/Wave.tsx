@@ -4,56 +4,57 @@ export class Wave{
 	private centerY:number;
 	private canvasWidth:number;
 	private canvasHeight:number;
-	private point:any;
+	private totalPoints:number;
 	private points:any[];
 	private color:string;
-	private numberOfPoints:number;
 	private pointGap:number;
-	private cnt:number;
-	constructor(cnt:number,color:string,canvasWidth:number,canvasHeight:number){
-		this.cnt = cnt;
+	private index:number;
+
+	constructor(index:number,totalPoints:number,color:string){
+		this.index = index;
+		this.totalPoints = totalPoints;
 		this.color = color;
 		this.points = [];
-		this.numberOfPoints = 6;
+	}
+	resize(canvasWidth:number,canvasHeight:number){
 		
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		
 		this.centerX = canvasWidth/2;
 		this.centerY = canvasHeight/2;
-		this.pointGap = this.canvasWidth/(this.numberOfPoints-1);
+		
+		this.pointGap = this.canvasWidth/(this.totalPoints-1);
 		
 		this.init();
 	}
 	init(){
-		for (let i=0;i<this.numberOfPoints;i++){
-			if (i-this.cnt < 0 ){
-				const now:number = this.numberOfPoints - this.cnt + i ;
-				this.points[now] =  new Point(now,this.pointGap*now,this.centerY);
-			}
-			else {
-				const now:number = i - this.cnt
-				this.points[now] = new Point(now,this.pointGap*now,this.centerY);
-			}
+		this.points = [];
+		for (let i = 0; i<this.totalPoints;i++){
+			const point = new Point(
+			this.index+i,
+			this.pointGap * i,
+			this.centerY)
 			
-		}
+			this.points[i] = point;
+		};
 	}
+	
 	draw(ctx:CanvasRenderingContext2D){
 		ctx.beginPath();
 		let prevX = this.points[0].x;
 		let prevY = this.points[0].y;
 		ctx.moveTo(prevX,prevY);
-		for (let i=0;i<this.numberOfPoints;i++){
+		for (let i=0;i<this.totalPoints;i++){
+			if (i !== 0 && i !== this.totalPoints -1){
+				this.points[i].update();
+			}
 			const nx = (prevX+this.points[i].x)/2;
 			const ny = (prevY+this.points[i].y)/2;
 			ctx.quadraticCurveTo(prevX,prevY,nx,ny);
-			
 			prevX = this.points[i].x;
 			prevY = this.points[i].y;
 			
-			if (i !== 0 && i !== this.numberOfPoints -1){
-				this.points[i].update();
-			}
 		}
 		ctx.lineTo(prevX,prevY);
 		ctx.lineTo(this.canvasWidth,this.canvasHeight);

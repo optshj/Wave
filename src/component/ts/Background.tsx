@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCanvas } from './useCanvas';
-import { Wave } from './Wave';
+import { WaveGroup } from './WaveGroup';
 
 
 type DrawingProps = {
@@ -13,16 +13,12 @@ const Background: React.FC<DrawingProps> = ({canvasWidth,canvasHeight}) => {
 		ctx.fillStyle = '#FFFFFF';
 		ctx.fillRect(0,0,canvasWidth,canvasHeight);
 	};
-	
-	const wave1 = new Wave(1,'#64D6FF',canvasWidth,canvasHeight);
-	const wave2 = new Wave(2,'#46FFFF',canvasWidth,canvasHeight);
-	const wave3 = new Wave(3,'#8282FF',canvasWidth,canvasHeight);
+	const wave = new WaveGroup(canvasWidth,canvasHeight);
+
 	
 	const animate = (ctx:CanvasRenderingContext2D) => {
 		fillBackground(ctx);
-		wave1.draw(ctx);
-		wave2.draw(ctx);
-		wave3.draw(ctx);
+		wave.draw(ctx);
 	};
 	const canvasRef = useCanvas(canvasWidth,canvasHeight,animate);
 	

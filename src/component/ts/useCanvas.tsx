@@ -4,8 +4,9 @@ export const useCanvas = (
 	canvasWidth:number,
 	canvasHeight:number,
 	animate:(ctx: CanvasRenderingContext2D) => void) => {
+
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-	
+
 	useEffect(()=>{
 		const canvas = canvasRef.current;
 		const ctx = canvas?.getContext('2d');
